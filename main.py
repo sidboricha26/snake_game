@@ -1,14 +1,15 @@
 from tkinter import *
 import random
 
+#CONSTANTS
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
 SPEED = 100
 SPACE_SIZE = 50
 BODY_PARTS = 3
-SNAKE_COLOR = "#00FF00"
-FOOD_COLOR = "#FF0000"
-BACKGROUND_COLOR = "#000000"
+SNAKE_COLOR = "#409D65"
+FOOD_COLOR = "#D03737"
+BACKGROUND_COLOR = "#0C0606"
 
 class Snake:
 
@@ -17,6 +18,7 @@ class Snake:
         self.coordinates = []
         self.squares = []
 
+        #creating a list of coordinates
         for i in range(0, BODY_PARTS):
             self.coordinates.append([0, 0])
 
@@ -25,8 +27,9 @@ class Snake:
             self.squares.append(square)
 
 class Food:
-
+    #construct a food
     def __init__(self):
+        #randomly construct a food object
         x = random.randint(0, ( GAME_WIDTH / SPACE_SIZE) - 1 ) * SPACE_SIZE
         y = random.randint(0, ( GAME_HEIGHT / SPACE_SIZE) - 1 ) * SPACE_SIZE
 
@@ -109,34 +112,57 @@ def check_collisions(snake):
             return True
 
     return False
+
 def game_over():
 
     canvas.delete(ALL)
-    canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2, font=('Consolas', 70), text="GAME OVER", fill="red", tag="gameover")
+    canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2, font=('Consolas', 70), text="GAME OVER", fill="#D05757", tag="gameover")
 
-
+#Create an instance of tkinter frame or window
 window = Tk()
+#Set the title of the frame
 window.title("Snake Game")
-window.resizable(False, False)
+#Set width and height as false to make the window of fixed size
+window.resizable(False, False) #(width, height)
 
 #icon
 Image_icon = PhotoImage(file="Images/icon.png")
 window.iconphoto(False, Image_icon)
 
+
 score = 0
+#direction of snake when game starts
 direction = 'down'
 
-heading = Label(window, text="Score -> {}".format(score), font=('Consolas', 40))
-heading.pack()
+#header part with score and images
+frame = Frame(window, width=700, height=90, bg="#326A9E")
 
+#heading
+heading = Label(window, text="Score -> {}".format(score), font=('Consolas', 40), background="#326A9E")
+heading.place(x= 210, y= 10)
+
+#images
+snake1_Image = PhotoImage(file="Images/snake-1.png")
+Label(window, image=snake1_Image, width=150, bg="#326A9E").place(x=30, y=10)
+snake2_Image = PhotoImage(file="Images/snake-1.png")
+Label(window, image=snake2_Image, width=150, bg="#326A9E").place(x=530, y=10)
+
+frame.pack()
+
+#Canvas widget is a blank area on which you can draw figures, create text, and place images.
 canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
 canvas.pack()
 
+#To refresh the window in Tkinter, call update() method
 window.update()
 
+#Return the width of this widget.
 window_width = window.winfo_width()
+#Return height of this widget.
 window_height = window.winfo_height()
+#Return the number of pixels of the width of the screen of this widget in pixel.
 screen_width = window.winfo_screenwidth()
+#Return the number of pixels of the height of the screen of this widget in pixel.
 screen_height = window.winfo_screenheight()
 
 x = int((screen_width/2) - (window_width/2))
@@ -144,6 +170,7 @@ y = int((screen_height/2) - (window_height/2))
 
 window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
+#bind is used to connect an event passed in the widget along with the event handler
 window.bind('<Left>', lambda event: change_direction('left'))
 window.bind('<Right>', lambda event: change_direction('right'))
 window.bind('<Up>', lambda event: change_direction('up'))
